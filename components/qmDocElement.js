@@ -1,3 +1,5 @@
+import { mapMutations } from '../vuex.esm.browser.js'
+
 export default {
     name: 'qm-Doc-Element',
     props:{
@@ -9,8 +11,8 @@ export default {
       text:String
     },
     methods:{
-      wasSelected:function(){
-        this.$emit("child-selected",this.id);
+      selectThisElement(){
+        this.$store.commit('SELECTELEMENT',this.id)
       }
     },
     computed:{
@@ -32,7 +34,7 @@ export default {
     <div 
       class="qmDocElement"
       :style="styleObject"
-      @mousedown="wasSelected"
+      v-on:mousedown="selectThisElement"
       >
       {{text}},{{id}},{{pos_x}},{{pos_y}}
     </div>

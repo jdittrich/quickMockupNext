@@ -1,7 +1,9 @@
 import qmDocElement from './components/qmDocElement.js'
-import documentElements from './testData.js'
+import { mapMutations } from './vuex.esm.browser.js'
+import store from './store/index.js';
 
-console.log(documentElements);
+//import documentElements from './testData.js'
+
 
 export default {
     name:'app',
@@ -15,14 +17,46 @@ export default {
                 pos_y:0,
                 width:1000, 
                 height:1000
-            },
-            documentElements:documentElements,
-            selectedDocumentElements:[]
+            }
         }   
     },
+    computed: {
+        documentElements:function(){
+            return this.$store.state.document.documentElements;
+        },
+        selectedDocumentElement:function(){
+            return this.$store.state.document.selectedElementId;
+        }
+    },
     methods:{
-        "childselected":function(id){
-            this.selectedDocumentElements[0]=id;
+        unselectAll(){
+            this.$store.commit("UNSELECTALL")
+        },
+        moveselected(event){
+            
+            //if nothing is selected…
+            if (this.selectedDocumentElement===""){
+                return
+            }
+
+            
+            //create a copy
+            //TBD
+            // hide the original
+            //TBD
+            //move element
+
+            let elementToMove = this.documentElements.find(element => 
+                element.id === this.selectedDocumentElement
+            )
+            
+            console.log("elementToMove:", elementToMove, " Event:", event);
+            
+            this.$store.commit("MOVEELEMENTBY",{
+                "element": elementToMove,
+                 "x":event.movementX,
+                 "y":event.movementY
+            });            
         }
     },
     template:`
@@ -30,14 +64,14 @@ export default {
         width:95%;
         height:95%;
         background-color:#ABC;
-        position:absolute;
-    "
+        position:absolute;"    
 
+        v-on:mousemove.left.ctrl="moveselected"
     >
+        <button v-on:click="unselectAll">unselect</button>
         <qm-doc-element 
-            v-on:child-selected="childselected"
             v-for="documentElement in documentElements" :key="documentElement.id"
-            v-bind:pos_x  ="documentElement.pos_x"
+            v-bind:pos_x  = "documentElement.pos_x"
             v-bind:pos_y  = "documentElement.pos_y"
             v-bind:width  = "documentElement.width"
             v-bind:height = "documentElement.height"
