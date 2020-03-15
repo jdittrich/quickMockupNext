@@ -46,14 +46,10 @@ export default {
             //TBD
             //move element
 
-            let elementToMove = this.documentElements.find(element => 
-                element.id === this.selectedDocumentElement
-            )
-            
-            console.log("elementToMove:", elementToMove, " Event:", event);
-            
+            let id = this.selectedDocumentElement;
+                        
             this.$store.commit("MOVEELEMENTBY",{
-                "element": elementToMove,
+                "id": id,
                  "x":event.movementX,
                  "y":event.movementY
             });            
