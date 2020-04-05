@@ -12,6 +12,7 @@ export default {
     },
     methods:{
       selectThisElement(){
+        console.log("mousedown on qm.element", " ID:", this.id)
         this.$store.commit('SELECTELEMENT',this.id)
       }
     },
@@ -23,8 +24,9 @@ export default {
           left: this.pos_x+"px",
           top: this.pos_y+"px",
           position:"absolute",
-          "background-color":"rgba(100,160,220,0.5)"
-        }
+          "background-color":"rgba(100,160,220,0.5)",
+          "user-select":"none"
+        };
       }
     },
     data:function(){
