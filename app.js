@@ -53,7 +53,7 @@ export default {
             //copy to selected elements to the proxy array
             let selectedElement = this.$store.state.document.documentElements.filter(element =>
                 element.id === this.$store.state.document.selectedElementId)[0]; //filter returns an array, so [0]
-            console.log("app.js","selected element is ", selectedElement);
+
             //TODO: It easily happens that this does not work, cause there might no be an element if people just click the canvas. 
             let proxyCopy = createProxyCopy(selectedElement);
             
@@ -81,6 +81,9 @@ export default {
             
         },
         mouseup(event){
+            //TODO: Needs to decide *what* shall happen. I guess the action would be determined by the type of element dragged: 
+            //if an element is dragged, move the selected element
+            //if an scaleHandler is dragged, scale the selected element
             console.log("mouseup on app.js")
             if (!this.dragInProgress){
                 return
@@ -116,7 +119,7 @@ export default {
             v-bind:width  = "documentElement.width"
             v-bind:height = "documentElement.height"
             v-bind:text   = "documentElement.text" 
-            v-bind:id     = "documentElement.id"
+            v-bind:id     = "documentElement.id"    
             >
         </qm-doc-element>
 
