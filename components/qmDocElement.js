@@ -1,4 +1,48 @@
 import { mapMutations } from '../vuex.esm.browser.js'
+import dragDropManager from '../dragDropManager.js'
+
+/**
+ * @implements {dragDropPolicy}
+ */
+const scalingDragDropPolicy = {
+  mousedown: function (event) {
+    //I wonder if I just should call super (get proxy element and attach it (how?) to the mouse cursor)
+  },
+  mousemove: function (event, pos_mousedown, proxy) {
+    //get difference to start event
+    let x_diff = event.pageX - pos_mousedown.pos_x;
+    let y_diff = event.pageY - pos_mousedown.pos_y;
+
+    //move proxy by start event position
+    proxy.el.left += x_diff;
+    proxy.el.top  += y_diff;
+  },
+  mouseup: function (event, pos_mousedown) {
+    store.commit(
+      "MOVEELEMENTBY",
+      {
+        'pos_x_diff': event.pageX - pos_mousedown.pos_x,
+        'pos_y_diff': event.pageY - pos_mousedown.pos_y
+      }
+    );
+  },
+  //do return unappended element, leave proxy management to drag drop manager
+  //Possible TODO: get some standard functions that copy elements…
+  createProxyElement: function (relatedElement) {
+    let proxyElement = document.createElement("div");
+    let styles = {
+      top    :relatedElement.top,
+      left   :relatedElement.left,
+      width  :relatedElement.width,
+      height :relatedElement.height,
+      outline:"black solid 1px"
+    }
+    //mixin styles to proxy element
+    Object.assign(proxyElement.style,styles);
+    return proxyElement;
+  }
+};
+
 
 export default {
     name: 'qm-Doc-Element',
@@ -12,8 +56,9 @@ export default {
     },
     methods:{
       selectThisElement(){
-        console.log("mousedown on qm.element", " ID:", this.id)
-        this.$store.commit('SELECTELEMENT',this.id)
+        this.$store.commit('SELECTELEMENT',this.id);
+        dragDropManager.setPolicy(scalingDragDropPolicy);
+        dragDropManager.setRelatedDOMElement(this.$el);
       }
     },
     computed:{

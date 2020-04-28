@@ -42,18 +42,18 @@ const mutations ={
     * mutation to move an element with an ID
     * @param {Object} state - Vuex State
     * @param {Object} scaleElementBy
-    * @param {Object} scaleElementBy.id - ID of the object to be moved
+    * // @param {Object} scaleElementBy.id - ID of the object to be moved
     * @param {Number} scaleElementBy.width_diff - horizontal scale
     * @param {Number} scaleElementBy.height_diff - vertical scale
     * @param {String} [scaleElementBy.directions="se"] - direction of scaling (should be "se", southeast for now) 
     */
-    SCALEELEMENT(state,scaleElementBy){
+   
+    SCALESELECTEDELEMENTSBY(state,scaleElementBy){
         let element = state.documentElements.find(element =>
-            element.id === scaleElementBy.id
-        );
-        
+            element.id === this.selectedElementId
+        );        
         element.width += scaleElementBy.width_diff;
-        element.pos_y += moveElementBy.height_diff;
+        element.height += moveElementBy.height_diff;
     }
 };
 
